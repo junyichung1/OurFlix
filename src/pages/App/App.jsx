@@ -5,12 +5,15 @@ import SignupPage from '../SignupPage/SignupPage';
 import LoginPage from '../LoginPage/LoginPage';
 import userService from '../../utils/userService';
 import NavBar from '../../components/NavBar/NavBar';
+import HomePage from '../HomePage/HomePage';
+import * as moviesApi from '../../utils/movies-api'
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      user: userService.getUser()
+      user: userService.getUser(),
+      moviesList: [],
     };
   }
 
@@ -24,6 +27,12 @@ class App extends Component {
     this.setState({user: userService.getUser()})
   }
   /*--- Lifecycle Methods ---*/
+  async componentDidMount() {
+    const movies = await moviesApi.index()
+    this.setState({moviesList: movies})
+    console.log(this.state.moviesList.results[0].title)
+    console.log(this.state.moviesList.results)
+  }
 
   render() {
     return (
@@ -32,6 +41,7 @@ class App extends Component {
         user={this.state.user} 
         handleLogout={this.handleLogout}
         />
+       
         <Switch>
           <Route exact path='/' render={() =>
            <div>Hello World!</div> 
@@ -49,6 +59,11 @@ class App extends Component {
               handleSignupOrLogin={this.handleSignupOrLogin}
             />
           }/>
+          <Route exact path = '/movies' render={() =>
+           <HomePage 
+           info={this.state.moviesList}
+           />
+        } />
         </Switch>
       </div>
     );
