@@ -61,7 +61,7 @@ class App extends Component {
           }/>
           <Route exact path = '/movies' render={() =>
            <HomePage 
-           info={this.state.moviesList}
+           moviesList={this.state.moviesList}
            />
         } />
         </Switch>
