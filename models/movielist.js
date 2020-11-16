@@ -8,7 +8,8 @@ const movieListSchema = new mongoose.Schema({
         type: String
     },
     movieID: {
-        type: String
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'MovieApi'
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,

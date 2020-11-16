@@ -3,9 +3,10 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 import './App.css';
 import SignupPage from '../SignupPage/SignupPage';
 import LoginPage from '../LoginPage/LoginPage';
+import List from '../../components/List/List';
 import userService from '../../utils/userService';
 import NavBar from '../../components/NavBar/NavBar';
-import HomePage from '../HomePage/HomePage';
+import MoviePage from '../MoviePage/MoviePage';
 import * as moviesApi from '../../utils/movies-api'
 
 class App extends Component {
@@ -44,7 +45,12 @@ class App extends Component {
        
         <Switch>
           <Route exact path='/' render={() =>
+          <>
+          <List />
            <div>Hello World!</div> 
+           <button>Add List</button>
+           
+           </>
           }/>
           <Route exact path='/signup' render={({ history }) => 
             <SignupPage
@@ -60,7 +66,7 @@ class App extends Component {
             />
           }/>
           <Route exact path = '/movies' render={() =>
-           <HomePage 
+           <MoviePage 
            moviesList={this.state.moviesList}
            />
         } />
