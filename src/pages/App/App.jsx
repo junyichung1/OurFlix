@@ -3,7 +3,7 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 import './App.css';
 import SignupPage from '../SignupPage/SignupPage';
 import LoginPage from '../LoginPage/LoginPage';
-import List from '../../components/List/List';
+import PlayList from '../../components/PlayList/PlayList';
 import userService from '../../utils/userService';
 import NavBar from '../../components/NavBar/NavBar';
 import MoviePage from '../MoviePage/MoviePage';
@@ -18,13 +18,23 @@ class App extends Component {
       trendingList: [],
       moviesList: [],
       invalidForm: true,
-      formData: {newListName: ''}
+      formData: {name: '',
+      
+    }
     };
+    this.initialState = {
+      formData: {name: ''}
+    }
   }
 
   formRef = React.createRef();
 
   /*--- Callback Methods ---*/
+
+  handleFormReset = () => {
+    this.setState(() => this.initialState)
+  }
+
   handleChange = e => {
   const formData = {...this.state.formData, [e.target.name]: e.target.value};
     this.setState({
@@ -39,11 +49,11 @@ class App extends Component {
       moviesList: [...state.moviesList, newList]
     }),
     () => this.props.history.push('/'))
-    console.log("This is getting called");
   }
 
   handleSubmit = e => {
     e.preventDefault();
+    e.target.reset();
     const newState = {...this.state.formData}
     this.handleNewList(newState)
   };
@@ -59,7 +69,6 @@ class App extends Component {
   /*--- Lifecycle Methods ---*/
   async componentDidMount() {
     const movies = await moviesApi.index()
-    console.log("component did mount!");
     const lists = await moviesListApi.getAll();
     this.setState({trendingList: movies, moviesList: lists})
   }
@@ -76,9 +85,11 @@ class App extends Component {
           <Route exact path='/' render={() =>
             <>
               <div>Home Page</div> 
-              <List />
-              <form ref={this.formRef} onSubmit={this.handleSubmit}>
-                <input type="text" name="newListName" value={this.state.formData.newListName} onChange={this.handleChange}/>
+              <PlayList 
+              lists={this.state.moviesList}
+              />
+              <form ref={this.formRef} onSubmit={this.handleSubmit.bind(this)} onReset={this.handleFormReset}>
+                <input type="text" name="name" value={"" || this.state.formData.name} onChange={this.handleChange}/>
                 <button type='submit'>Add List</button>
               </form>
             </>
@@ -98,7 +109,7 @@ class App extends Component {
           }/>
           <Route exact path = '/movies' render={() =>
            <MoviePage 
-           moviesList={this.state.moviesList}
+           moviesList={this.state.trendingList}
            />
         } />
         </Switch>
