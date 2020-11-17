@@ -4,18 +4,18 @@ const movieListSchema = new mongoose.Schema({
     name: {
         type: String
     },
-    category: {
-        type: String
-    },
+    // category: {
+    //     type: String
+    // },
     movieID: {
         type: [mongoose.Schema.Types.ObjectId],
         ref: 'MovieApi'
     },
-    user: {
+    userID: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }
-    }, {
+}, {
         timestamps: true
     }
 );

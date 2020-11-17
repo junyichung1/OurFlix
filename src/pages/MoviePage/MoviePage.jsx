@@ -3,7 +3,7 @@ import moviesApi from '../../utils/movies-api';
 
 
 
-  function HomePage(props) {
+  function MoviePage(props) {
     const base_url= "http://image.tmdb.org/t/p/"
     let size = "w185_and_h278_bestv2/"
     console.log(size)
@@ -29,4 +29,4 @@ import moviesApi from '../../utils/movies-api';
 
 
 
-export default HomePage;
+export default MoviePage;
