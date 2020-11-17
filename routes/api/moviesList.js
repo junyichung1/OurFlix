@@ -3,7 +3,8 @@ const router = express.Router();
 const moviesListCtrl = require('../../controllers/moviesList');
 
 
-router.post('/movies', moviesListCtrl.create);
+router.post('/', moviesListCtrl.create);
+router.get('/', moviesListCtrl.index);
 
 
 
