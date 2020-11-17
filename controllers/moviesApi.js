@@ -13,7 +13,7 @@ function index(req, res) {
   console.log('hello')
   axios.get(`https://api.themoviedb.org/3/trending/movie/week?api_key=${API_KEY}`)
   .then(function (response){
-    console.log(response.data)
+    // console.log(response.data)
     res.json(response.data)
 
   })
