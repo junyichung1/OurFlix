@@ -3,21 +3,61 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 import './App.css';
 import SignupPage from '../SignupPage/SignupPage';
 import LoginPage from '../LoginPage/LoginPage';
+import PlayList from '../../components/PlayList/PlayList';
 import userService from '../../utils/userService';
 import NavBar from '../../components/NavBar/NavBar';
-import HomePage from '../HomePage/HomePage';
-import * as moviesApi from '../../utils/movies-api'
+import MoviePage from '../MoviePage/MoviePage';
+import * as moviesApi from '../../utils/movies-api';
+import * as moviesListApi from '../../utils/moviesList-api';
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
       user: userService.getUser(),
+      trendingList: [],
       moviesList: [],
+      invalidForm: true,
+      formData: {name: '',
+      
+    }
     };
+    this.initialState = {
+      formData: {name: ''}
+    }
   }
 
+  formRef = React.createRef();
+
   /*--- Callback Methods ---*/
+
+  handleFormReset = () => {
+    this.setState(() => this.initialState)
+  }
+
+  handleChange = e => {
+  const formData = {...this.state.formData, [e.target.name]: e.target.value};
+    this.setState({
+      formData,
+      invalidForm: !this.formRef.current.checkValidity()
+    });
+  };
+
+  handleNewList = async newListData => {
+    const newList = await moviesListApi.create(newListData);
+    this.setState(state => ({
+      moviesList: [...state.moviesList, newList]
+    }),
+    () => this.props.history.push('/'))
+  }
+
+  handleSubmit = e => {
+    e.preventDefault();
+    e.target.reset();
+    const newState = {...this.state.formData}
+    this.handleNewList(newState)
+  };
+
   handleLogout = () => {
     userService.logout();
     this.setState({user: null})
@@ -28,10 +68,9 @@ class App extends Component {
   }
   /*--- Lifecycle Methods ---*/
   async componentDidMount() {
-    const movies = await moviesApi.getMovies()
-    this.setState({moviesList: movies})
-    console.log(this.state.moviesList.results[0].title)
-    console.log(this.state.moviesList.results)
+    const movies = await moviesApi.index()
+    const lists = await moviesListApi.getAll();
+    this.setState({trendingList: movies, moviesList: lists})
   }
 
   render() {
@@ -44,7 +83,16 @@ class App extends Component {
        
         <Switch>
           <Route exact path='/' render={() =>
-           <div>Hello World!</div> 
+            <>
+              <div>Home Page</div> 
+              <PlayList 
+              lists={this.state.moviesList}
+              />
+              <form ref={this.formRef} onSubmit={this.handleSubmit.bind(this)} onReset={this.handleFormReset}>
+                <input type="text" name="name" value={"" || this.state.formData.name} onChange={this.handleChange}/>
+                <button type='submit'>Add List</button>
+              </form>
+            </>
           }/>
           <Route exact path='/signup' render={({ history }) => 
             <SignupPage
@@ -60,8 +108,8 @@ class App extends Component {
             />
           }/>
           <Route exact path = '/movies' render={() =>
-           <HomePage 
-           moviesList={this.state.moviesList}
+           <MoviePage 
+           moviesList={this.state.trendingList}
            />
         } />
         </Switch>
