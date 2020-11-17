@@ -6,8 +6,10 @@ const axios = require('axios');
 // (trending movies) https://api.themoviedb.org/3/trending/movie/week?api_key=${API_KEY}
 
 module.exports = {
-  index
+  index, 
+  // popular 
 }
+
 
 function index(req, res) {
   console.log('hello')
@@ -21,3 +23,15 @@ function index(req, res) {
     console.log(error)
   })
 }
+
+// function popular(req, res) {
+//   console.log('hello')
+//   axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=en-US&page=1`)
+//     .then(function (response) {
+//       console.log(response.data)
+//       res.json(response.data)
+//     })
+//     .catch(function (error) {
+//       console.log(error)
+//     })
+// }

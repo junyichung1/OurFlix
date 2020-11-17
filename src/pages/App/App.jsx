@@ -28,7 +28,7 @@ class App extends Component {
   }
   /*--- Lifecycle Methods ---*/
   async componentDidMount() {
-    const movies = await moviesApi.index()
+    const movies = await moviesApi.getMovies()
     this.setState({moviesList: movies})
     console.log(this.state.moviesList.results[0].title)
     console.log(this.state.moviesList.results)

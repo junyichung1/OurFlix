@@ -1,10 +1,16 @@
 const BASE_URL = '/api/moviesApi'
 
 export default {
-  index
+  getMovies,
+  // popular 
 }
 
-export function index() {
+export function getMovies() {
   return fetch(`${BASE_URL}/movies`)
   .then(res => res.json())
 }
+
+// export function popular() {
+//   return fetch(`${BASE_URL}/movies`)
+//   .then(res => res.json())
+// }
