@@ -8,8 +8,10 @@ module.exports = {
 
 async function create(req, res) {
 //   req.body.user = req.user._id
-  console.log(`222222222`)
+  // console.log(`222222222`, req.body)
+  req.body.userID = req.body.user._id 
   const list = await MovieList.create(req.body);
+  // console.log('This is list', list)
   res.status(201).json(list);
 }
 

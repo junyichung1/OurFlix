@@ -19,11 +19,13 @@ class App extends Component {
       moviesList: [],
       invalidForm: true,
       formData: {name: '',
-      
+      user: userService.getUser()
     }
-    };
-    this.initialState = {
-      formData: {name: ''}
+  };
+  this.initialState = {
+    formData: {name: '', 
+      user: userService.getUser()
+  }
     }
   }
 
@@ -44,7 +46,9 @@ class App extends Component {
   };
 
   handleNewList = async newListData => {
+    // newListData.user = userService.getUser(); 
     const newList = await moviesListApi.create(newListData);
+    console.log(newListData)
     this.setState(state => ({
       moviesList: [...state.moviesList, newList]
     }),
@@ -55,6 +59,7 @@ class App extends Component {
     e.preventDefault();
     e.target.reset();
     const newState = {...this.state.formData}
+    console.log(newState)
     this.handleNewList(newState)
   };
 
